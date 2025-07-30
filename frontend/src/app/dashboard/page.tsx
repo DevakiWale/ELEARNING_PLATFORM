@@ -13,7 +13,7 @@ export default function Dashboard() {
     fetchProfile();
   }, []);
 
-   const fetchProfile = async () => {
+  const fetchProfile = async () => {
     try {
       const res = await api.get('/auth/me');
       setProfile(res.data);
@@ -49,39 +49,51 @@ export default function Dashboard() {
       ) : (
         <div className="grid md:grid-cols-1 gap-6">
           {enrollments.map((enroll: any) => (
-            <div key={enroll.id} className="border rounded p-4 bg-white shadow">
-              <img
-                src={enroll.course?.thumbnail_url || '/default-thumbnail.jpg'}
-                alt={enroll.course?.title || 'Course Image'}
-                className="h-40 w-full object-cover rounded mb-3"
-              />
-              <h2 className="text-xl font-semibold">{enroll.course?.title || 'Untitled Course'}</h2>
-              <p className="text-sm text-gray-500 mb-2">{enroll.course?.description || 'No description available.'}</p>
+            <div 
+              key={enroll.id} 
+              className="border rounded p-4 bg-white shadow hover:shadow-lg transition cursor-pointer"
+              onClick={() => window.location.href = `/courses/${enroll.course.id}`}
+            >
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="md:w-1/3">
+                  <img
+                    src={enroll.course?.thumbnail_url || '/default-thumbnail.jpg'}
+                    alt={enroll.course?.title || 'Course Image'}
+                    className="h-40 w-full object-cover rounded mb-3"
+                  />
+                </div>
+                
+                <div className="md:w-2/3">
+                  <h2 className="text-xl font-semibold">{enroll.course?.title || 'Untitled Course'}</h2>
+                  <p className="text-sm text-gray-500 mb-2">{enroll.course?.description || 'No description available.'}</p>
 
-              {/* Progress Bar */}
-              <div className="w-full bg-gray-200 rounded h-4 mb-2">
-                <div
-                  className="bg-green-500 h-4 rounded transition-all duration-300"
-                  style={{ width: `${enroll.progress || 0}%` }}
-                ></div>
-              </div>
-              <p className="text-sm text-gray-600 mb-4">Progress: {enroll.progress || 0}%</p>
-
-              {/* Lessons List */}
-              <div className="space-y-2">
-                {Array.isArray(enroll.course?.lessons) && enroll.course.lessons.length > 0 ? (
-                  enroll.course.lessons.map((lesson: any) => (
-                    <Link
-                      key={lesson.id}
-                      href={`/courses/${enroll.course.id}/lessons/${lesson.id}`}
-                      className="block text-blue-600 hover:underline"
+                  {/* Progress Bar */}
+                  <div className="w-full bg-gray-200 rounded h-4 mb-2">
+                    <div
+                      className="bg-green-500 h-4 rounded transition-all duration-300"
+                      style={{ width: `${enroll.progress || 0}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-4">Progress: {enroll.progress || 0}%</p>
+                  
+                  <div className="flex justify-between items-center">
+                    <button 
+                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `/courses/${enroll.course.id}`;
+                      }}
                     >
-                      ▶️ {lesson.title}
-                    </Link>
-                  ))
-                ) : (
-                  <p className="text-sm text-red-500">No lessons added yet.</p>
-                )}
+                      View Course
+                    </button>
+                    
+                    {enroll.progress === 100 && (
+                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                        🎉 Completed
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           ))}
