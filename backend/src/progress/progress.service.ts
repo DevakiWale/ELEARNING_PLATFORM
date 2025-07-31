@@ -3,15 +3,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Enrollment } from '../enrollments/enrollment.entity';
 import { CertificateService } from '../certificates/certificates.service';
-import { Course } from '../courses/course.entity';
-import { User } from '../users/user.entity';
+import { UsersService } from '../users/users.service';
+import { CoursesService } from '../courses/courses.service';
+import { User } from 'src/users/user.entity';
+import { Course } from 'src/courses/course.entity';
 
 @Injectable()
 export class ProgressService {
   constructor(
     @InjectRepository(Enrollment)
     private enrollmentRepo: Repository<Enrollment>,
-    private certificateService: CertificateService, // Inject CertificateService
+    private certificateService: CertificateService,
+    private usersService: UsersService,
+    private coursesService: CoursesService,
   ) {}
 
   async saveProgress(
@@ -36,12 +40,9 @@ export class ProgressService {
     enrollment.progress = percent;
     await this.enrollmentRepo.save(enrollment);
 
-    // ✅ Check and issue certificate if progress is 100%
-    if (percent === 100) {
-      await this.certificateService.issue(
-        enrollment.user as User,
-        enrollment.course as Course,
-      );
+    // ✅ Issue certificate after 100% completion with full entities
+    if (percent === 100 && enrollment.user && enrollment.course) {
+      await this.certificateService.issue(enrollment.user, enrollment.course);
     }
   }
 }

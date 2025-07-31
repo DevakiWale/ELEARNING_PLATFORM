@@ -22,7 +22,7 @@ export class CertificateController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    const userId = req.user?.['id'];
+    const userId = req.user?.['userId'];
     if (!userId) {
       throw new BadRequestException('User ID not found in request.');
     }
@@ -41,7 +41,7 @@ export class CertificateController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    const userId = req.user?.['id'];
+    const userId = req.user?.['userId'];
     if (!userId) {
       throw new BadRequestException('User ID not found in request.');
     }

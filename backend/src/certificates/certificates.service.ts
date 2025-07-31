@@ -4,7 +4,7 @@ import { Certificate } from './certificate.entity';
 import { Repository } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Course } from '../courses/course.entity';
-import * as PDFDocument from 'pdfkit';
+import PDFDocument from 'pdfkit';
 
 @Injectable()
 export class CertificateService {
