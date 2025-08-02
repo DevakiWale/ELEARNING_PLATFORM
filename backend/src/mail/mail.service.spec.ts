@@ -1,18 +1,42 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { MailService } from './mail.service';
+import { Injectable } from '@nestjs/common';
+import * as nodemailer from 'nodemailer';
 
-describe('MailService', () => {
-  let service: MailService;
+@Injectable()
+export class MailService {
+  private transporter;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [MailService],
-    }).compile();
+  constructor() {
+    this.transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
+    });
+  }
 
-    service = module.get<MailService>(MailService);
-  });
+  async sendMail(to: string, subject: string, html: string) {
+    await this.transporter.sendMail({
+      from: `"E-Learning Platform" <${process.env.MAIL_USER}>`,
+      to,
+      subject,
+      html,
+    });
+  }
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-});
+  async sendEnrollmentConfirmation(email: string, courseTitle: string) {
+    await this.sendMail(
+      email,
+      '🎉 Enrollment Confirmed!',
+      `<p>You enrolled in <strong>${courseTitle}</strong>. Happy learning!</p>`,
+    );
+  }
+
+  async sendCourseCompletion(email: string, courseTitle: string) {
+    await this.sendMail(
+      email,
+      '✅ Course Completed!',
+      `<p>Congrats! You’ve completed <strong>${courseTitle}</strong>. Certificate is ready.</p>`,
+    );
+  }
+}

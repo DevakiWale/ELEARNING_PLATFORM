@@ -31,9 +31,14 @@ export class AuthController {
     return this.authService.verifyEmailToken(token);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('me')
+  @UseGuards(AuthGuard('jwt'))
   getProfile(@Request() req) {
-    return req.user;
+    const user = req.user;
+    return {
+      id: user?.id,
+      name: user?.name,
+      email: user?.email,
+    };
   }
 }
