@@ -32,12 +32,6 @@ export class User {
   @CreateDateColumn()
   created_at: Date;
 
-  @Column({ nullable: true })
-  verificationToken: string;
-
-  @Column({ default: false })
-  isVerified: boolean;
-
   @OneToMany(() => Enrollment, (enrollment) => enrollment.user)
   enrollments: Enrollment[];
 

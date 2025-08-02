@@ -28,7 +28,7 @@ export class MailService {
     await this.sendMail(
       email,
       '🎉 Enrollment Confirmed!',
-      `<p>You enrolled in <strong>${courseTitle}</strong>. Happy learning!</p>`,
+      `<p>Hi there,</p><p>You have successfully enrolled in <strong>${courseTitle}</strong>.</p><p>Happy learning! 🚀</p>`,
     );
   }
 
@@ -36,7 +36,7 @@ export class MailService {
     await this.sendMail(
       email,
       '✅ Course Completed!',
-      `<p>Congrats! You’ve completed <strong>${courseTitle}</strong>. Certificate is ready.</p>`,
+      `<p>Congratulations!</p><p>You’ve completed the course <strong>${courseTitle}</strong>.</p><p>Your certificate is now available.</p>`,
     );
   }
 }
