@@ -22,5 +22,12 @@ export class UsersService {
   async findById(id: string) {
     return this.userRepo.findOne({ where: { id } });
   }
-  
+
+  async findByVerificationToken(token: string) {
+    return this.userRepo.findOne({ where: { verificationToken: token } });
+  }
+
+  async save(user: User) {
+    return this.userRepo.save(user);
+  }
 }

@@ -74,7 +74,14 @@ import { MailModule } from './mail/mail.module';
     NotificationsModule,
     MailModule,
   ],
-  providers: [ProgressService, ProgressGateway, ChatGateway, UploadService, NotificationsService, MailService],
+  providers: [
+    ProgressService,
+    ProgressGateway,
+    ChatGateway,
+    UploadService,
+    NotificationsService,
+    MailService,
+  ],
   controllers: [UploadController, CertificateController],
 })
 export class AppModule {}
